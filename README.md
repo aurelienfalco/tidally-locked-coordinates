@@ -15,3 +15,12 @@ The resulting outputs look like this.
 Original code by dkoll.
 Thanks to Huanzhou Yang for testing and improvements.
 
+# Install
+
+You can "install" the package by running:
+
+    pip install -e .
+
+or:
+
+    python setup.py install

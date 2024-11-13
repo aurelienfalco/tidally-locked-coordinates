@@ -36,12 +36,7 @@ def get_GCM(path, filenames, zonalonly=False, vars_list={}):
     state = Dummy()
 
     # DEFINE VARIABLES (this can vary according to model!):
-    AllVars = [ Variable("t","Time"), \
-                Variable("lat","latitude"), \
-                Variable("lon","longitude"), \
-                Variable("p","p"),
-                Variable("alt","altitude")
-    ]
+    AllVars = [ ]
     for varkey in vars_list:
         AllVars.append( Variable(varkey,vars_list[varkey]) )
 

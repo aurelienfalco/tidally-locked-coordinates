@@ -140,7 +140,10 @@ def transform_state(state,vars_list, xxx_todo_changeme,lon_ss=0.,do_vel=False):
 
     state_TL.lon_ss = lon_ss*degtorad
     state_TL.p = state.p
-    state_TL.alt = state.alt
+    try:
+        state_TL.alt = state.alt
+    except:
+        pass
     #state_TL.phalf = state.phalf
     state_TL.t = state.t
     state_TL.lat = np.linspace(-90,90,Nlat)
@@ -151,9 +154,9 @@ def transform_state(state,vars_list, xxx_todo_changeme,lon_ss=0.,do_vel=False):
 
     for var in vars_list:
         ## skip if velocities in list, do that at end
-        if var[0]=="u" or var=="ucomp":
+        if (var[0]).lower()=="u" or var=="ucomp":
             var_u = var
-        elif var[0]=="v" or var=="vcomp":
+        elif (var[0]).lower()=="v" or var=="vcomp":
             var_v = var
         else:
             x = getattr(state,var)
