@@ -36,10 +36,12 @@ def get_GCM(path, filenames, zonalonly=False, vars_list={}):
     state = Dummy()
 
     # DEFINE VARIABLES (this can vary according to model!):
-    AllVars = [ Variable("t","time"), \
-                Variable("lat","lat"), \
-                Variable("lon","lon"), \
-                Variable("p","lev")]
+    AllVars = [ Variable("t","Time"), \
+                Variable("lat","latitude"), \
+                Variable("lon","longitude"), \
+                Variable("p","p"),
+                Variable("alt","altitude")
+    ]
     for varkey in vars_list:
         AllVars.append( Variable(varkey,vars_list[varkey]) )
 
@@ -53,17 +55,20 @@ def get_GCM(path, filenames, zonalonly=False, vars_list={}):
         for var in AllVars:
             # get the data, also deal with 0-d variables (e.g. P0)
             # if len( f.variables[var.name] ) > 0:
-            if list( f.variables[var.name] ) > 0:
+            if var.name not in f.variables:
+                print(f"Warning: Var {var.name} not in diagfi...")
+                continue
+            if len(list( f.variables[var.name] )) > 0:
                 x = f.variables[var.name][:] * var.factor
             else:
                 x = f.variables[var.name].get_value() * var.factor
-                
+
             if x.ndim > 2:       # average over last dim (usually, longitude)
                 if zonalonly:
                     x = numpy.average(x,axis=x.ndim-1)
                 else:
                     pass
-                    
+
                 # if state already contains the variable,
                 # append along time (first) dimension
                 old_x = getattr(state, var.abbrev, [])

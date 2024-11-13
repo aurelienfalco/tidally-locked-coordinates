@@ -6,11 +6,11 @@ from scipy.interpolate import griddata
 * Original code by Daniel Koll.
 * Improvements and testing by Huanzhou Yang.
 
-For definitions and diagrams, see 
+For definitions and diagrams, see
 Appendix B in Koll & Abbot (2015).
 
 --
-This library transforms between Earth-like spherical 
+This library transforms between Earth-like spherical
 coordinates (angles defined wrt. axis of rotation) and
 tidally-locked spherical coordinates (angles defined wrt.
 axis of insolation;
@@ -114,7 +114,7 @@ def interpolate_to_TL_ndim(lat,lon,lat_TL,lon_TL,data,lon_ss=0.,method="nearest"
                                         data[i,j,...],lon_ss,method).T
     else:
         # fix this later...x
-        print "(interpolate_to_TL_ndim) Error! expected 4 or fewer dimensions"
+        print("(interpolate_to_TL_ndim) Error! expected 4 or fewer dimensions")
         pass
 
     return data_interp
@@ -133,12 +133,14 @@ def interpolate_to_TL_ndim(lat,lon,lat_TL,lon_TL,data,lon_ss=0.,method="nearest"
 #    Nlat/Nlon for TL coords should match the GCM's lat/lon resolution in Earth-like coordinate!
 #   only pick larger values for making smooth plots in which conservation doesn't matter.
 
-def transform_state(state,vars_list,(Nlat,Nlon),lon_ss=0.,do_vel=False):
+def transform_state(state,vars_list, xxx_todo_changeme,lon_ss=0.,do_vel=False):
+    (Nlat,Nlon) = xxx_todo_changeme
     degtorad = np.pi/180.
     state_TL = Dummy()    # placeholder object
-    
+
     state_TL.lon_ss = lon_ss*degtorad
     state_TL.p = state.p
+    state_TL.alt = state.alt
     #state_TL.phalf = state.phalf
     state_TL.t = state.t
     state_TL.lat = np.linspace(-90,90,Nlat)
@@ -149,9 +151,9 @@ def transform_state(state,vars_list,(Nlat,Nlon),lon_ss=0.,do_vel=False):
 
     for var in vars_list:
         ## skip if velocities in list, do that at end
-        if var[0]=="U" or var=="ucomp":
+        if var[0]=="u" or var=="ucomp":
             var_u = var
-        elif var[0]=="V" or var=="vcomp":
+        elif var[0]=="v" or var=="vcomp":
             var_v = var
         else:
             x = getattr(state,var)
